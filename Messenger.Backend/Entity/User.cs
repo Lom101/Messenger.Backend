@@ -10,6 +10,6 @@ public class User
     public string ProfilePictureUrl { get; set; }
     public string Status { get; set; }
     public DateTime LastActiveAt { get; set; }
-    public ICollection<Chat> Chats { get; set; } = new List<Chat>();
+    public ICollection<ChatUser> ChatUsers { get; set; } = new List<ChatUser>(); 
     public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Messenger.Backend.Data.Configurations;
+using Microsoft.EntityFrameworkCore;
 using Messenger.Backend.Entity;
 
 namespace Messenger.Backend.Data;
@@ -18,6 +19,12 @@ public class MessengerDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new AttachmentConfiguration());
+        modelBuilder.ApplyConfiguration(new ChatConfiguration());
+        modelBuilder.ApplyConfiguration(new ContactConfiguration());
+        modelBuilder.ApplyConfiguration(new MessageConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        
+        modelBuilder.ApplyConfiguration(new ChatUserConfiguration());
     }
 }
