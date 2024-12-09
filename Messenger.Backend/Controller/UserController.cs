@@ -17,40 +17,52 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
     {
         var users = await _unitOfWork.Users.GetAllAsync();
         return Ok(users);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(Guid id)
+    public async Task<ActionResult<User>> GetUserById(Guid id)
     {
         var user = await _unitOfWork.Users.GetByIdAsync(id);
         if (user == null)
         {
-            return NotFound();
+            return NotFound(new { Message = "User not found" });
         }
 
         return Ok(user);
     }
 
     [HttpPost]
-    public async Task<ActionResult<User>> CreateUser(User user)
+    public async Task<ActionResult<User>> CreateUser([FromBody] User user)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         await _unitOfWork.Users.AddAsync(user);
         await _unitOfWork.SaveChangesAsync();
-        return CreatedAtAction("GetUser", new { id = user.Id }, user);
+        
+        return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
     }
 
-    public async Task<IActionResult> UpdateUser(Guid id, User user)
+    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] User updatedUser)
     {
-        if (id != user.Id)
+        if (!ModelState.IsValid)
         {
-            return BadRequest();
+            return BadRequest(ModelState);
+        }
+        
+        var user = await _unitOfWork.Users.GetByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound(new { Message = "User not found" });
         }
 
-        await _unitOfWork.Users.UpdateAsync(user);
+        await _unitOfWork.Users.UpdateAsync(updatedUser);
         await _unitOfWork.SaveChangesAsync();
         return NoContent();
     }
@@ -60,7 +72,7 @@ public class UserController : ControllerBase
         var user = await _unitOfWork.Users.GetByIdAsync(id);
         if (user == null)
         {
-            return NotFound();
+            return NotFound(new { Message = "User not found" });
         }
 
         await _unitOfWork.Users.DeleteAsync(id);
