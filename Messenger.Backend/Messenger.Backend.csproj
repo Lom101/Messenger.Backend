@@ -22,11 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controller\" />
       <Folder Include="Data\Migrations\" />
       <Folder Include="Dto\" />
       <Folder Include="Infrastructure\" />
-      <Folder Include="Repository\Interfaces\" />
       <Folder Include="SeedData\" />
     </ItemGroup>
 
