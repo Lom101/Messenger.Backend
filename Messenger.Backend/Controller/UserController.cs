@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Messenger.Backend.Controller;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;   
 
     public UserController(IUnitOfWork unitOfWork)
     {
@@ -17,16 +17,17 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
+    public async Task<IActionResult> GetAllUsers()
     {
         var users = await _unitOfWork.Users.GetAllAsync();
         return Ok(users);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUserById(Guid id)
+    public async Task<IActionResult> GetUserById(Guid id)
     {
         var user = await _unitOfWork.Users.GetByIdAsync(id);
+        
         if (user == null)
         {
             return NotFound(new { Message = "User not found" });
@@ -36,7 +37,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<User>> CreateUser([FromBody] User user)
+    public async Task<IActionResult> CreateUser([FromBody] User user)
     {
         if (!ModelState.IsValid)
         {
@@ -49,6 +50,7 @@ public class UserController : ControllerBase
         return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
     }
 
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] User updatedUser)
     {
         if (!ModelState.IsValid)
@@ -67,6 +69,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
         var user = await _unitOfWork.Users.GetByIdAsync(id);
@@ -78,5 +81,5 @@ public class UserController : ControllerBase
         await _unitOfWork.Users.DeleteAsync(id);
         await _unitOfWork.SaveChangesAsync();
         return NoContent();
-    }
+    }   
 }

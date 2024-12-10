@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-
 using Messenger.Backend.Data;
 using Messenger.Backend.Repository.Common;
 using Messenger.Backend.Repository.Common.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
 
 builder.Services.AddDbContext<MessengerDbContext>(options => 
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -16,8 +17,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -31,6 +30,7 @@ using (var scope = app.Services.CreateScope())
     //dbContext.Database.Migrate();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();
