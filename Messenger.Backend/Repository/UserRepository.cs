@@ -16,4 +16,8 @@ public class UserRepository : Repository<User>, IUserRepository
         return await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email);
     }
 
+    public async Task<User> GetByUsernameAndPasswordHashAsync(string username, string passwordHash)
+    {
+        return await _context.Set<User>().FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == passwordHash);
+    }
 }

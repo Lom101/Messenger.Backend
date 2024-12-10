@@ -11,7 +11,7 @@ namespace Messenger.Backend.Controller;
 public class ChatController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
-    public ChatController(UnitOfWork unitOfWork)
+    public ChatController(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -33,6 +33,7 @@ public class ChatController : ControllerBase
         return Ok(chat);
     }
 
+    [HttpPost]
     public async Task<IActionResult> CreateChat([FromBody] Chat chat)
     {
         if (!ModelState.IsValid)
