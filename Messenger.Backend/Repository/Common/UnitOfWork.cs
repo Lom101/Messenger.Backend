@@ -30,9 +30,4 @@ public class UnitOfWork : IUnitOfWork
         return await _context.SaveChangesAsync();
     }
 
-    public void Dispose()
-    {
-        _context.Dispose();
-    }
-
 }

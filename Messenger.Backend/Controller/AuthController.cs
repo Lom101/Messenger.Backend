@@ -31,7 +31,11 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        _userService.Register(request.Username, request.Password);
-        return Ok("User registered succesfully");
+        var result = await _userService.Register(request.Username, request.Password);
+        if (result == true)
+        {
+            return Ok("User registered successfully.");
+        }
+        return BadRequest("User registration failed.");
     }
 }

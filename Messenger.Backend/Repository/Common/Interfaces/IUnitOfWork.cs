@@ -3,7 +3,7 @@ using Messenger.Backend.Repository.Interfaces;
 
 namespace Messenger.Backend.Repository.Common.Interfaces;
 
-public interface IUnitOfWork : IDisposable
+public interface IUnitOfWork
 {
     IUserRepository Users { get; }
     IRepository<Chat> Chats { get; }

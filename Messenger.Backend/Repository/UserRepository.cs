@@ -11,9 +11,9 @@ public class UserRepository : Repository<User>, IUserRepository
     public UserRepository(MessengerDbContext context) : base(context) { }
 
     
-    public async Task<User> GetByEmailAsync(string email)
+    public async Task<User> GetByUsernameAsync(string username)
     {
-        return await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email);
+        return await _context.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
     }
 
     public async Task<User> GetByUsernameAndPasswordHashAsync(string username, string passwordHash)
