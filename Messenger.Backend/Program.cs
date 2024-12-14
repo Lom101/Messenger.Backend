@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Messenger.Backend.Data;
 using Messenger.Backend.Repository.Common;
 using Messenger.Backend.Repository.Common.Interfaces;
+using Messenger.Backend.Service;
+using Messenger.Backend.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -13,6 +15,14 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<MessengerDbContext>(options => 
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+builder.Services.AddScoped<MessengerDbContext>();
+
+var secret = builder.Configuration["Jwt:Key"];
+var issuer = builder.Configuration["Jwt:Issuer"];   
+builder.Services.AddScoped<IJwtTokenService>(_ => new JwtTokenService(secret, issuer));
+
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
